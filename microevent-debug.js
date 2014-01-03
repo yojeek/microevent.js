@@ -11,6 +11,14 @@ MicroEvent.prototype	= {
 		this._events[event] = this._events[event]	|| [];
 		this._events[event].push(fct);
 	},
+	once: function(event, fct){
+		var wrapped = function() {
+			this.unbind(event, fct);
+			this.unbind(event, wrapped);
+		}
+		this.bind(event, fct);
+		this.bind(event, wrapped);
+	},
 	unbind	: function(event, fct){
 		console.assert(typeof fct === 'function');
 		this._events = this._events || {};		
